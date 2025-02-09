@@ -1,0 +1,86 @@
+*{
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family:serif;
+    text-align: center;
+    background: url("../images/back.jpeg") repeat center center fixed;
+    background-size: cover;
+}
+.container {
+    position:absolute;
+    top: 25%;
+    left: 33%;
+}
+
+/* .logo {
+    width: 160px;
+    margin-top: 20px;
+
+} */
+main p{
+    font-size:0rex;
+    font-weight: bolder;
+
+}
+
+.button {
+    display: inline-block;
+    padding: 10px ;
+    background-color:rgba(138, 108, 40, 0.726);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    width: 140PX;
+    padding: 20PX;
+}
+p{
+    font-size: 20px;
+    margin: 0;
+    display: inline-block;
+
+}
+.links a{
+    text-decoration: none;
+    color: #000;
+    font-size: large;
+    
+    
+}
+main{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+}
+footer{
+    width: 100%;
+    background-color:rgba(138, 108, 40, 0.726);
+    opacity: calc();
+    height: 35px;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+  
+ 
+}
+.button:hover {
+    background-color: rgba(45, 72, 100, 0.616);
+}
+@media screen and (max-width: 600px) {
+    .board {
+        grid-template-columns: repeat(3, 80px);
+    }
+
+    .card {
+        width: 80px;
+        height: 80px;
+    }
+}
+

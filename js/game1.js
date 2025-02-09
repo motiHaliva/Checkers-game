@@ -1,0 +1,289 @@
+let board = document.querySelector("#id_board");
+let matrix = [
+    [-1, 1, -1, 1, -1, 1, -1, 1],
+    [1, -1, 1, -1, 1, -1, 1, -1],
+    [-1, 1, -1, 1, -1, 1, -1, 1],
+    [0, -1, 0, -1, 0, -1, 0, -1],
+    [0, -1, 0, -1, 0, -1, 0, -1],
+    [2, -1, 2, -1, 2, -1, 2, -1],
+    [-1, 2, -1, 2, -1, 2, -1, 2],
+    [2, -1, 2, -1, 2, -1, 2, -1],
+];
+const createBoard = () => {
+    for (let i = 0; i < matrix.length; i++) {
+        for (let j = 0; j < matrix[i].length; j++) {
+
+            let cell = document.createElement("div");
+            cell.classList.add("cell");
+            cell.classList.add((i + j) % 2 === 0 ? "blackCell" : "whiteCell");
+            board.append(cell);
+            cell.dataset.row = i;
+            cell.dataset.col = j;
+
+            if (matrix[i][j] === 1 || matrix[i][j] === 2) {
+                let circle = document.createElement("div");
+                circle.dataset.row = i;
+                circle.dataset.col = j;
+                if (matrix[i][j] === 1) {
+                    circle.classList.add("circle", "blackCircle");
+                } else if (matrix[i][j] === 2) {
+                    circle.classList.add("circle", "whiteCircle");
+                }
+                // מאזין לתא שלוחצים עליו כדי להראו לו את האפשרויות שלו
+                circle.addEventListener("click", () => {
+                    showPossibleMoves(circle);
+                });
+
+                cell.appendChild(circle);
+                //נותן לי יכולת להזיז את העיגול
+                circle.setAttribute("draggable", "true");
+                // שומר על העיגול שזז
+                circle.addEventListener("dragstart", dragStart);
+            }
+
+            // מאזין לתא שנגרר משהו מתוכו
+            cell.addEventListener("dragover", dragOver);
+            // מאזין לתא שנגרר משהו לתוכו
+            cell.addEventListener("drop", drop);
+        }
+    }
+};
+
+let draggedCircle;
+const dragStart = (e) => {
+    draggedCircle = e.target;
+
+}
+
+
+const dragOver = (e) => {
+    e.preventDefault();
+
+}
+
+const drop = (e) => {
+    e.preventDefault();
+    let target = e.target;
+
+    if (isValidMove(target)) {
+        target.appendChild(draggedCircle);
+
+        //עדכון המיקום של העיגול שורה וטור
+        draggedCircle.dataset.row = target.dataset.row;
+        draggedCircle.dataset.col = target.dataset.col;
+
+    }
+
+}
+
+// הוספת פונקציה לבדיקת אכילה
+const canEat = (target) => {
+    let cellRow = parseInt(target.dataset.row);
+    let cellCol = parseInt(target.dataset.col);
+    let circleRow = parseInt(draggedCircle.dataset.row);
+    let circleCol = parseInt(draggedCircle.dataset.col);
+
+
+
+    if (!draggedCircle.classList.contains('king')) {
+
+
+        if (draggedCircle.classList.contains('blackCircle')) {
+            if (cellRow <= circleRow) return false; // שחור לא יכול לאכול אחורה
+        } else {
+            if (cellRow >= circleRow) return false; // לבן לא יכול לאכול אחורה
+        }
+    }
+    // בדיקה האם המהלך הוא קפיצה של 2
+    if (Math.abs(circleRow - cellRow) !== 2) return false;
+    if (Math.abs(circleCol - cellCol) !== 2) return false;
+
+    // מציאת הכלי שנמצא באמצע (שאמור להיאכל)
+    let middleRow = (circleRow + cellRow) / 2;
+    let middleCol = (circleCol + cellCol) / 2;
+
+
+    // במקום לחפש בכל התאים, אפשר ישירות לפנות לתא הספציפי
+    let middleCell = document.querySelector(
+        `.cell[data-row="${middleRow}"][data-col="${middleCol}"]`
+    );
+
+    if (!middleCell || !middleCell.firstChild) return false;
+
+    let middlePiece = middleCell.firstChild;
+
+    // בדיקה האם הכלי באמצע הוא של היריב
+    return (draggedCircle.classList.contains('blackCircle') &&
+        middlePiece.classList.contains('whiteCircle')) ||
+        (draggedCircle.classList.contains('whiteCircle') &&
+            middlePiece.classList.contains('blackCircle'));
+}
+
+const isValidMove = (target) => {
+    clearHighlights();
+    if (!target.classList.contains("cell")) return false;
+
+    let cellRow = parseInt(target.dataset.row);
+    let cellCol = parseInt(target.dataset.col);
+    let circleRow = parseInt(draggedCircle.dataset.row);
+    let circleCol = parseInt(draggedCircle.dataset.col);
+
+    if (canEat(target)) {
+        removePiece(target);
+        return true;
+    }
+
+    if (draggedCircle.classList.contains('king')) {
+        if (Math.abs(circleRow - cellRow) !== 1) return false;
+        if (Math.abs(circleCol - cellCol) !== 1) return false;
+        return true;
+    }
+
+    if (circleRow - cellRow !== 1 && draggedCircle.classList.contains("whiteCircle")) return false;
+
+    if (circleRow - cellRow !== -1 && draggedCircle.classList.contains("blackCircle")) return false;
+
+    if (Math.abs(circleCol - cellCol) !== 1) return false;
+
+    checkForKing(draggedCircle, cellRow);
+
+
+
+
+    return true;
+}
+
+// פונקציה להסרת הכלי שנאכל
+const removePiece = (target) => {
+    let cellRow = parseInt(target.dataset.row);
+    let cellCol = parseInt(target.dataset.col);
+    let circleRow = parseInt(draggedCircle.dataset.row);
+    let circleCol = parseInt(draggedCircle.dataset.col);
+
+    let middleRow = (circleRow + cellRow) / 2;
+    let middleCol = (circleCol + cellCol) / 2;
+
+    let middleCell = document.querySelector(
+        `.cell[data-row="${middleRow}"][data-col="${middleCol}"]`
+    );
+
+    if (middleCell && middleCell.firstChild) {
+        middleCell.removeChild(middleCell.firstChild);
+        matrix[middleRow][middleCol] = 0;
+    }
+ 
+}
+
+
+const checkForKing = (circle, row) => {
+    // בדיקה האם החייל הגיע לשורה האחרונה
+    if (circle.classList.contains('blackCircle') && row === 7) {
+        circle.classList.add('king');
+        circle.style.border = '3px solid gold';
+    }
+    if (circle.classList.contains('whiteCircle') && row === 0) {
+        circle.classList.add('king');
+        circle.style.border = '3px solid red';
+    }
+}
+// הוספת פונקציית הצגת מהלכים אפשריים
+const showPossibleMoves = (circle) => {
+    clearHighlights();
+    draggedCircle = circle
+    
+    let row = parseInt(circle.dataset.row);
+    let col = parseInt(circle.dataset.col);
+    
+    if (isNaN(row) || isNaN(col)) return;
+
+    let validMoves = getValidMoves(circle, row, col);
+    let eatingMoves = getEatingMoves(circle, row, col);
+    
+    validMoves.forEach(move => {
+        highlightCell(move, "rgba(0,255,0,0.3)");
+    });
+    
+    eatingMoves.forEach(move => {
+        highlightCell(move, "rgba(255,0,0,0.3)");
+    });
+}
+
+const getValidMoves = (circle, row, col) => {
+    let moves = [];
+    
+    if (circle.classList.contains('king')) {
+        moves = [
+            {row: row + 1, col: col + 1},
+            {row: row + 1, col: col - 1},
+            {row: row - 1, col: col + 1},
+            {row: row - 1, col: col - 1}
+        ];
+    } else if (circle.classList.contains('blackCircle')) {
+        moves = [
+            {row: row + 1, col: col + 1},
+            {row: row + 1, col: col - 1}
+        ];
+    } else {
+        moves = [
+            {row: row - 1, col: col + 1},
+            {row: row - 1, col: col - 1}
+        ];
+    }
+    return moves.filter(move => isValidPosition(move.row, move.col));
+}
+const getEatingMoves = (circle, row, col) => {
+    let possibleMoves = [];
+    
+    // מלך יכול לנוע לכל הכיוונים
+    if (circle.classList.contains('king')) {
+        possibleMoves = [
+            {row: row + 2, col: col + 2},
+            {row: row + 2, col: col - 2},
+            {row: row - 2, col: col + 2},
+            {row: row - 2, col: col - 2}
+        ];
+    } 
+    // כלי שחור נע רק למטה
+    else if (circle.classList.contains('blackCircle')) {
+        possibleMoves = [
+            {row: row + 2, col: col + 2},
+            {row: row + 2, col: col - 2}
+        ];
+    }
+    // כלי לבן נע רק למעלה 
+    else if (circle.classList.contains('whiteCircle')) {
+        possibleMoves = [
+            {row: row - 2, col: col + 2},
+            {row: row - 2, col: col - 2}
+        ];
+    }
+
+    // סינון מהלכים חוקיים ואפשריים לאכילה
+    return possibleMoves.filter(move => {
+        if (!isValidPosition(move.row, move.col)) return false;
+        let targetCell = document.querySelector(
+            `.cell[data-row="${move.row}"][data-col="${move.col}"]`
+        );
+        return targetCell && canEat(targetCell);
+    });
+}
+const highlightCell = (move, color) => {
+    let cell = document.querySelector(
+        `.cell[data-row="${move.row}"][data-col="${move.col}"]`
+    );
+    if (cell && !cell.firstChild && cell.classList.contains('whiteCell')) {
+        cell.style.backgroundColor = color;
+    }
+}
+
+const clearHighlights = () => {
+    document.querySelectorAll('.whiteCell').forEach(cell => {
+        cell.style.backgroundColor = "";
+    });
+}
+
+const isValidPosition = (row, col) => {
+    return row >= 0 && row < 8 && col >= 0 && col < 8;
+}
+
+createBoard();
