@@ -5,7 +5,7 @@ body {
     margin: 0;
     font-family:serif;
     text-align: center;
-    background: url("../images/back.jpeg") repeat center center fixed;
+    background: url("../images/ground.jpg") repeat center center fixed;
     background-size: cover;
 }
 .container {

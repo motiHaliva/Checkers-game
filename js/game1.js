@@ -1,3 +1,10 @@
+let isPlayerTurn = true;
+const currentPlayer = JSON.parse(localStorage.getItem("currentPlayer"));
+const computerPlayer = JSON.parse(localStorage.getItem("computerPlayer"));
+const playerScoreElement = document.querySelector("#player_score");
+const computerScoreElement = document.querySelector("#computer_score");
+let playerScore = 0;
+let computerPlayerScore = 0;
 let board = document.querySelector("#id_board");
 let matrix = [
     [-1, 1, -1, 1, -1, 1, -1, 1],
@@ -60,8 +67,11 @@ const dragOver = (e) => {
     e.preventDefault();
 
 }
+// עדכון פונקציית drop
+
 
 const drop = (e) => {
+    if (!isPlayerTurn) return;
     e.preventDefault();
     let target = e.target;
 
@@ -71,12 +81,27 @@ const drop = (e) => {
         //עדכון המיקום של העיגול שורה וטור
         draggedCircle.dataset.row = target.dataset.row;
         draggedCircle.dataset.col = target.dataset.col;
+        isPlayerTurn = false;
+     
+          if (!checkWinner()) {  // בודק אם יש מנצח
+        isPlayerTurn = false;
+        setTimeout(makeComputerMove, 1000);
+         }
+
 
     }
 
 }
+const updatePlayerName = () => {
+    const currentPlayer = JSON.parse(localStorage.getItem("currentPlayer"));
+    if (currentPlayer && currentPlayer.name) {
+        const playerScoreElement = document.querySelector("#player_score");
+        playerScoreElement.textContent = `${currentPlayer.name}'s score: 0`;
+    }
+}
 
-// הוספת פונקציה לבדיקת אכילה
+
+
 const canEat = (target) => {
     let cellRow = parseInt(target.dataset.row);
     let cellCol = parseInt(target.dataset.col);
@@ -129,7 +154,8 @@ const isValidMove = (target) => {
     let circleCol = parseInt(draggedCircle.dataset.col);
 
     if (canEat(target)) {
-        removePiece(target);
+        removePiece(target)
+        checkForKing(draggedCircle, cellRow);
         return true;
     }
 
@@ -171,7 +197,6 @@ const removePiece = (target) => {
         middleCell.removeChild(middleCell.firstChild);
         matrix[middleRow][middleCol] = 0;
     }
- 
 }
 
 
@@ -179,82 +204,86 @@ const checkForKing = (circle, row) => {
     // בדיקה האם החייל הגיע לשורה האחרונה
     if (circle.classList.contains('blackCircle') && row === 7) {
         circle.classList.add('king');
-        circle.style.border = '3px solid gold';
+        circle.style.backgroundImage = 'url("../images/dark_king.png")';
     }
     if (circle.classList.contains('whiteCircle') && row === 0) {
         circle.classList.add('king');
-        circle.style.border = '3px solid red';
+        circle.style.backgroundImage = 'url("../images/white_king.png")';
     }
 }
-// הוספת פונקציית הצגת מהלכים אפשריים
+
 const showPossibleMoves = (circle) => {
+    if (!isPlayerTurn || circle.classList.contains('blackCircle')) {
+        return;
+    }
+
     clearHighlights();
     draggedCircle = circle
-    
+
     let row = parseInt(circle.dataset.row);
     let col = parseInt(circle.dataset.col);
-    
+
     if (isNaN(row) || isNaN(col)) return;
 
     let validMoves = getValidMoves(circle, row, col);
     let eatingMoves = getEatingMoves(circle, row, col);
-    
+
     validMoves.forEach(move => {
-        highlightCell(move, "rgba(0,255,0,0.3)");
+        highlightCell(move, "../images/dark_selected_wood.png");
     });
-    
+
     eatingMoves.forEach(move => {
-        highlightCell(move, "rgba(255,0,0,0.3)");
+        highlightCell(move, "../images/dark_selected_wood.png");
     });
 }
 
 const getValidMoves = (circle, row, col) => {
     let moves = [];
-    
+
     if (circle.classList.contains('king')) {
         moves = [
-            {row: row + 1, col: col + 1},
-            {row: row + 1, col: col - 1},
-            {row: row - 1, col: col + 1},
-            {row: row - 1, col: col - 1}
+            { row: row + 1, col: col + 1 },
+            { row: row + 1, col: col - 1 },
+            { row: row - 1, col: col + 1 },
+            { row: row - 1, col: col - 1 }
         ];
     } else if (circle.classList.contains('blackCircle')) {
         moves = [
-            {row: row + 1, col: col + 1},
-            {row: row + 1, col: col - 1}
+            { row: row + 1, col: col + 1 },
+            { row: row + 1, col: col - 1 }
         ];
     } else {
         moves = [
-            {row: row - 1, col: col + 1},
-            {row: row - 1, col: col - 1}
+            { row: row - 1, col: col + 1 },
+            { row: row - 1, col: col - 1 }
         ];
     }
     return moves.filter(move => isValidPosition(move.row, move.col));
 }
 const getEatingMoves = (circle, row, col) => {
     let possibleMoves = [];
-    
+
     // מלך יכול לנוע לכל הכיוונים
     if (circle.classList.contains('king')) {
         possibleMoves = [
-            {row: row + 2, col: col + 2},
-            {row: row + 2, col: col - 2},
-            {row: row - 2, col: col + 2},
-            {row: row - 2, col: col - 2}
+            { row: row + 2, col: col + 2 },
+            { row: row + 2, col: col - 2 },
+            { row: row - 2, col: col + 2 },
+            { row: row - 2, col: col - 2 }
         ];
-    } 
+    }
     // כלי שחור נע רק למטה
     else if (circle.classList.contains('blackCircle')) {
         possibleMoves = [
-            {row: row + 2, col: col + 2},
-            {row: row + 2, col: col - 2}
+            { row: row + 2, col: col + 2 },
+            { row: row + 2, col: col - 2 }
         ];
     }
     // כלי לבן נע רק למעלה 
     else if (circle.classList.contains('whiteCircle')) {
         possibleMoves = [
-            {row: row - 2, col: col + 2},
-            {row: row - 2, col: col - 2}
+            { row: row - 2, col: col + 2 },
+            { row: row - 2, col: col - 2 }
         ];
     }
 
@@ -272,18 +301,141 @@ const highlightCell = (move, color) => {
         `.cell[data-row="${move.row}"][data-col="${move.col}"]`
     );
     if (cell && !cell.firstChild && cell.classList.contains('whiteCell')) {
-        cell.style.backgroundColor = color;
+        cell.style.backgroundImage = `url(${color})`;
     }
 }
 
 const clearHighlights = () => {
     document.querySelectorAll('.whiteCell').forEach(cell => {
-        cell.style.backgroundColor = "";
+        cell.style.backgroundImage = "";
     });
 }
 
 const isValidPosition = (row, col) => {
     return row >= 0 && row < 8 && col >= 0 && col < 8;
 }
+const makeComputerMove = () => {
+    const computerPieces = Array.from(document.querySelectorAll('.blackCircle'));
+    let validMove = false;
+
+    // קודם בודק אם יש אפשרות לאכול
+    for (let piece of computerPieces) {
+        draggedCircle = piece;
+        const row = parseInt(piece.dataset.row);
+        const col = parseInt(piece.dataset.col);
+        const eatingMoves = getEatingMoves(piece, row, col);
+
+        const validEatingMoves = eatingMoves.filter(move => {
+            const targetCell = document.querySelector(
+                `.cell[data-row="${move.row}"][data-col="${move.col}"]`
+            );
+            return targetCell && !targetCell.firstChild;
+        });
+
+        if (validEatingMoves.length > 0) {
+            const move = validEatingMoves[Math.floor(Math.random() * validEatingMoves.length)];
+            const targetCell = document.querySelector(
+                `.cell[data-row="${move.row}"][data-col="${move.col}"]`
+            );
+
+            // מוצא את החייל שצריך להיאכל
+            const middleRow = (parseInt(piece.dataset.row) + move.row) / 2;
+            const middleCol = (parseInt(piece.dataset.col) + move.col) / 2;
+            const middleCell = document.querySelector(
+                `.cell[data-row="${middleRow}"][data-col="${middleCol}"]`
+            );
+
+            // קודם מזיז את החייל
+            targetCell.appendChild(piece);
+            piece.dataset.row = move.row.toString();
+            piece.dataset.col = move.col.toString();
+
+            // אחר כך מסיר את החייל שנאכל
+            if (middleCell && middleCell.firstChild) {
+                middleCell.removeChild(middleCell.firstChild);
+                matrix[middleRow][middleCol] = 0;
+            }
+
+
+
+            checkForKing(piece, move.row);
+            validMove = true;
+            break;
+        }
+    }
+
+
+
+    if (!validMove) {
+        // מערבב את החיילים בצורה רנדומלית
+        computerPieces.sort(() => Math.random() - 0.5);
+
+        for (let piece of computerPieces) {
+            draggedCircle = piece;
+            const row = parseInt(piece.dataset.row);
+            const col = parseInt(piece.dataset.col);
+            const validMoves = getValidMoves(piece, row, col);
+
+            // מסנן רק מהלכים לתאים ריקים
+            const possibleMoves = validMoves.filter(move => {
+                const targetCell = document.querySelector(
+                    `.cell[data-row="${move.row}"][data-col="${move.col}"]`
+                );
+                return targetCell && !targetCell.firstChild;
+            });
+
+            if (possibleMoves.length > 0) {
+                // בוחר מהלך רנדומלי
+                const move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+                const targetCell = document.querySelector(
+                    `.cell[data-row="${move.row}"][data-col="${move.col}"]`
+                );
+
+                targetCell.appendChild(piece);
+                piece.dataset.row = move.row.toString();
+                piece.dataset.col = move.col.toString();
+                checkForKing(piece, move.row);
+                validMove = true;
+                break;
+            }
+        }
+    }
+
+    if (validMove) {
+
+        setTimeout(() => {
+            if (!checkWinner()) {
+                isPlayerTurn = true;
+            }
+        }, 1000);  // השהייה של חצי שנייה
+    }
+}
+const checkWinner = () => {
+    // בודק אם נשארו חיילים שחורים (של המחשב)
+    const blackPieces = document.querySelectorAll('.blackCircle');
+    if (blackPieces.length === 0) {
+        alert(`${currentPlayer.name} Won!`);
+        currentPlayer.score++;
+        localStorage.setItem("currentPlayer", JSON.stringify(currentPlayer));
+        setTimeout(() => {
+            window.location.href = "../project-folder/start.html";
+        }, 2000);
+        return true;
+    }
+    const whitePieces = document.querySelectorAll('.whiteCircle');
+    if (whitePieces.length === 0) {
+        alert("Computer Won!");
+        computerPlayer.score++;
+        localStorage.setItem("computerPlayer", JSON.stringify(computerPlayer));
+        setTimeout(() => {
+            window.location.href = "../project-folder/start.html";
+        }, 2000);
+        return true;
+    }
+
+    return false;
+}
+
 
 createBoard();
+updatePlayerName();

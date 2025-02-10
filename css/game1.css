@@ -1,3 +1,4 @@
+ 
 * {
     box-sizing: border-box;
 }
@@ -5,28 +6,29 @@
 body {
     margin: 0;
     text-align: center;
-    background-color:rgb(214, 169, 109);
+    background:rgba(209, 165, 71, 0.719);
 }
 
 .board {
     display: grid;
-    grid-template-columns: repeat(8,60px);
+    grid-template-columns: repeat(8, 60px);
     width: fit-content;
     margin: 20px auto;
-    border:solid 20px rgb(145, 85, 58);
+    border: solid 20px rgb(110, 58, 25);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
+
 .container {
     display: flex;
     flex-direction: row;
     align-items: start;
-   
 }
+
 .score-board {
     display: flex;
     justify-content: start;
     flex-direction: column;
-  margin: 20px;
+    margin: 20px;
     margin-bottom: 20px;
 }
 
@@ -41,39 +43,49 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    
 }
 
 .blackCell {
-    /* background: linear-gradient(to bottom right, #000, #333); */
-    background-color:rgba(143, 88, 62, 0.76);
+    background-color: rgba(143, 88, 62, 0.76);
     box-shadow: inset -3px -3px 5px rgba(255, 255, 255, 0.2),
                 inset 3px 3px 5px rgba(0, 0, 0, 0.5);
+    background-image: url("../images/dark_wood.png");     background-size: cover;
 }
 
 .whiteCell {
-    background-color:rgb(254, 232, 204);
-    /* background: linear-gradient(to bottom right, #fff, #ddd); */
     box-shadow: inset -3px -3px 5px rgba(255, 255, 255, 0.6),
                 inset 3px 3px 5px rgba(0, 0, 0, 0.2);
+    background-image: url("../images/white_wood.png"); 
+    background-size: cover;
 }
-.circle{
+
+.circle {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     z-index: 1999;
+    transition: transform 0.2s ease-in-out; /* אפקט בעת הזזת העכבר */
 }
 
 .blackCircle {
-    background:rgb(139, 83, 56);
-    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5); 
+    background-image:
+    url("../images/dark_piece.png");     background-size: cover;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
+    border: 3px solid #3E2723; /* גבול כהה עם אפקט סגנוני */
 }
 
 .whiteCircle {
-    background:rgb(214, 169, 109);
-    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3); 
+    background-image: url("../images/white_piece.png");     background-size: cover;
+
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+    border: 3px solid #D7B291; /* גבול כהה עם אפקט סגנוני */
 }
 
 .circle:hover {
-    transform: scale(1.01);
+    transform: scale(1.05); /* שינוי קטן בגודל כדי להדגיש את הכדור */
+}
+
+/* הוספת שולי צללים ליחסי תאים */
+.cell:hover {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
 }
