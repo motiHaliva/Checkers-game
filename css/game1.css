@@ -12,12 +12,15 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-image: url("../images/3.jpg");
+    background-size: cover;
+    background-position: center center;
+
 }
 
 .container {
     display: flex;
     justify-content: center;
-
     align-items: center;
     max-width: 1200px;
     width: 90%;
@@ -50,25 +53,21 @@ body {
     justify-content: center;
 }
 
-.blackCell {
-
-    background-color: rgba(143, 88, 62, 0.76);
+ .blackCell {
+    background-color: rgba(143, 88, 62, 0.76); /* צבע רקע עם שקיפות */
     box-shadow: inset -3px -3px 5px rgba(255, 255, 255, 0.2),
-        inset 3px 3px 5px rgba(0, 0, 0, 0.5);
-
+                inset 3px 3px 5px rgba(0, 0, 0, 0.5);
     background-image: url("../images/dark_wood.png");
     background-size: cover;
-
 }
 
 .whiteCell {
-
+    opacity: 80%;
     box-shadow: inset -3px -3px 5px rgba(255, 255, 255, 0.6), inset 3px 3px 5px rgba(0, 0, 0, 0.2);
-
-
     background-image: url("../images/white_wood.png");
     background-size: cover;
 }
+
 
 .circle {
     width: 50px;
@@ -79,6 +78,7 @@ body {
 
 .blackCircle {
     background-image: url("../images/dark_piece.png");
+
     background-size: cover;
     border: 3px solid #3E2723;
 }
@@ -143,7 +143,7 @@ h2 {
 
 button {
     padding: 15px;
-    background-color: rgb(148, 112, 92);
+    background-color:rgba(106, 55, 24, 0.795);
     color: white;
     border: none;
     border-radius: 5px;
@@ -172,7 +172,7 @@ a {
     gap: 7px;
 }
 
- #piecesPlayer {
+#piecesPlayer {
     background: rgba(255, 255, 255, 0.1);
     padding: 10px;
     border-radius: 10px;
@@ -181,10 +181,10 @@ a {
     display: flex;
     align-items: center;
     flex-direction: column;
+    background:rgba(106, 55, 24, 0.795);
 }
 
 #piecesComputer {
-    background: rgba(255, 255, 255, 0.1);
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -193,4 +193,19 @@ a {
     display: flex;
     align-items: center;
     flex-direction: column;
+    background:rgba(106, 55, 24, 0.795);
+}
+
+.timer {
+    position: absolute;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: white;
+    top: 27px;
+    right: 1%;
+    transform: translateX(-50%);
+    width: 12%;
+    padding: 10px;
+    background: rgba(106, 55, 24, 0.795);
 }
