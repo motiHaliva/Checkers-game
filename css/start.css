@@ -53,3 +53,6 @@ transition: background 0.3s;
 .menu-button:hover {
 background-color: #5d4037;
 }
+a{
+    text-decoration: none;
+}

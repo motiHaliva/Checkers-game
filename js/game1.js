@@ -468,22 +468,31 @@ const makeComputerMove = () => {
     }
 }
 const checkWinner = () => {
-    // בודק אם נשארו חיילים שחורים (של המחשב)
     const blackPieces = document.querySelectorAll('.blackCircle');
+    const whitePieces = document.querySelectorAll('.whiteCircle');
+    let currentPlayerData = JSON.parse(localStorage.getItem("currentPlayer"));
+    let gameTime = timer(); 
+    console.log(timer());
+    
+
     if (blackPieces.length === 0) {
-        alert(`${currentPlayer.name} Won!`);
-        currentPlayer.score++;
-        localStorage.setItem("currentPlayer", JSON.stringify(currentPlayer));
+        currentPlayerData.wins = (currentPlayerData.wins || 0) + 1;
+        currentPlayerData.playTime = (currentPlayerData.playTime || 0) + gameTime;
+        localStorage.setItem("currentPlayer", JSON.stringify(currentPlayerData));
+        
+        alert(`${currentPlayerData.name} Won!`);
         setTimeout(() => {
             window.location.href = "../project-folder/start.html";
         }, 2000);
         return true;
     }
-    const whitePieces = document.querySelectorAll('.whiteCircle');
+
     if (whitePieces.length === 0) {
+        currentPlayerData.losses = (currentPlayerData.losses || 0) + 1;
+        currentPlayerData.playTime = (currentPlayerData.playTime || 0) + gameTime;
+        localStorage.setItem("currentPlayer", JSON.stringify(currentPlayerData));
+        
         alert("Computer Won!");
-        computerPlayer.score++;
-        localStorage.setItem("computerPlayer", JSON.stringify(computerPlayer));
         setTimeout(() => {
             window.location.href = "../project-folder/start.html";
         }, 2000);
@@ -492,7 +501,6 @@ const checkWinner = () => {
 
     return false;
 }
-
 
 createBoard();
 updateCurrentPiecses();
