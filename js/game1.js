@@ -471,8 +471,8 @@ const checkWinner = () => {
     const blackPieces = document.querySelectorAll('.blackCircle');
     const whitePieces = document.querySelectorAll('.whiteCircle');
     let currentPlayerData = JSON.parse(localStorage.getItem("currentPlayer"));
-    let gameTime = timer(); 
-    console.log(timer());
+
+
     
 
     if (blackPieces.length === 0) {

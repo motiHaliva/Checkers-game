@@ -1,21 +1,15 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-}
 
-body {
+ body {
     text-align: center;
     background: rgba(139, 100, 78, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 90vh;
     background-image: url("../images/3.jpg");
     background-size: cover;
     background-position: center center;
-
+    padding: 20px;
 }
 
 .container {
@@ -23,38 +17,40 @@ body {
     justify-content: center;
     align-items: center;
     max-width: 1200px;
-    width: 90%;
-}
+    width: 100%;
+    position: relative;
+ 
+} 
 
-/* לוח המשחק */
+
 .game-board {
     display: flex;
     flex-direction: column;
     align-items: center;
     background: rgba(255, 255, 255, 0.1);
-    padding: 10px;
+    padding: clamp(5px, 2vw, 10px);
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .board {
     display: grid;
-    grid-template-columns: repeat(8, 60px);
+    grid-template-columns: repeat(8, minmax(30px, 60px));
     margin-top: 10px;
-    border: solid 10px rgb(110, 58, 25);
+    border: solid clamp(5px, 2vw, 10px) rgb(110, 58, 25);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
 .cell {
-    width: 60px;
-    height: 60px;
+    width: 100%;
+    aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
- .blackCell {
-    background-color: rgba(143, 88, 62, 0.76); /* צבע רקע עם שקיפות */
+.blackCell {
+    background-color: rgba(143, 88, 62, 0.76);
     box-shadow: inset -3px -3px 5px rgba(255, 255, 255, 0.2),
                 inset 3px 3px 5px rgba(0, 0, 0, 0.5);
     background-image: url("../images/dark_wood.png");
@@ -62,52 +58,28 @@ body {
 }
 
 .whiteCell {
-    opacity: 80%;
-    box-shadow: inset -3px -3px 5px rgba(255, 255, 255, 0.6), inset 3px 3px 5px rgba(0, 0, 0, 0.2);
+    opacity: 0.8;
+    box-shadow: inset -3px -3px 5px rgba(255, 255, 255, 0.6),
+                inset 3px 3px 5px rgba(0, 0, 0, 0.2);
     background-image: url("../images/white_wood.png");
     background-size: cover;
 }
 
-
-.circle {
-    width: 50px;
-    height: 50px;
+/* Pieces */
+.circle, .circles {
+    width: 80%;
+    height: 80%;
     border-radius: 50%;
-    transition: transform 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 
-.blackCircle {
-    background-image: url("../images/dark_piece.png");
-
-    background-size: cover;
-    border: 3px solid #3E2723;
-}
-
-.whiteCircle {
-    background-image: url("../images/white_piece.png");
-    background-size: cover;
-    border: 3px solid #D7B291;
-}
-
-h2 {
-    font-size: 16px;
-    color: white;
-}
-
-.circles {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    transition: transform 0.2s ease-in-out;
-}
-
-.blackCircles {
+.blackCircle, .blackCircles {
     background-image: url("../images/dark_piece.png");
     background-size: cover;
     border: 3px solid #3E2723;
 }
 
-.whiteCircles {
+.whiteCircle, .whiteCircles {
     background-image: url("../images/white_piece.png");
     background-size: cover;
     border: 3px solid #D7B291;
@@ -115,97 +87,137 @@ h2 {
 
 .circle:hover {
     transform: scale(1.1);
+    cursor: pointer;
 }
 
-/* לוח הניקוד */
+/* Score Board */
 .score-board {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
+    margin-top: clamp(10px, 3vw, 20px);
 }
 
 .score-board h2 {
     color: #a72a2a;
-    font-size: 22px;
+    font-size: clamp(16px, 2.5vw, 22px);
     margin: 5px 0;
 }
 
-/* חלק תפריט */
+/* Menu */
 .menu {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
-    margin-left: 50px;
-    margin-top: 15px;
+    gap: clamp(5px, 2vw, 15px);
+    margin: clamp(10px, 2vw, 15px);
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 button {
-    padding: 15px;
-    background-color:rgba(106, 55, 24, 0.795);
+    padding: clamp(8px, 2vw, 15px);
+    background-color: rgba(106, 55, 24, 0.795);
     color: white;
     border: none;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: clamp(14px, 1.5vw, 16px);
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.3s;
 }
 
 button:hover {
     background-color: rgb(110, 85, 70);
+    transform: translateY(-2px);
 }
 
-a {
+
+.piecesCnt {
+    position: fixed;
+    top: 20px;
+    left: 12px;
+    display: flex;
+    gap: 10px;
+    max-width: 300px;
+    width: 60%;
+}
+
+#piecesPlayer, #piecesComputer {
+    flex: 1;
+    padding: clamp(8px, 2vw, 10px);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: white;
+    background: rgba(106, 55, 24, 0.795);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+
+.timer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: clamp(8px, 2vw, 10px);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: white;
+    background: rgba(106, 55, 24, 0.795);
+    min-width: 120px;
+}
+a{
     color: white;
     text-decoration: none;
 }
 
-.piecesCnt {
-    display: flex;
-    position: absolute;
-    top: 20px;
-    left: 15%;
-    transform: translateX(-50%);
-    width: 20%;
-    padding: 10px;
-    gap: 7px;
+/* Media Queries */
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .board {
+        grid-template-columns: repeat(8, minmax(25px, 45px));
+    }
+
+    .piecesCnt {
+        position: static;
+        margin-bottom: 20px;
+    }
+
+    .timer {
+        margin-bottom: 20px;
+    }
+
+    .menu {
+        margin: 10px 0;
+    }
 }
 
-#piecesPlayer {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    color: white;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    background:rgba(106, 55, 24, 0.795);
+@media screen and (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .board {
+        grid-template-columns: repeat(8, minmax(20px, 35px));
+    }
+
+    .piecesCnt {
+        flex-direction: column;
+    }
+
+    .menu {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+    }
 }
 
-#piecesComputer {
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    margin-right: 20px;
-    color: white;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    background:rgba(106, 55, 24, 0.795);
-}
-
-.timer {
-    position: absolute;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    color: white;
-    top: 27px;
-    right: 1%;
-    transform: translateX(-50%);
-    width: 12%;
-    padding: 10px;
-    background: rgba(106, 55, 24, 0.795);
+* {
+    transition: all 0.3s ease-in-out;
 }
