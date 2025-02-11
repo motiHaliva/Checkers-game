@@ -1,23 +1,43 @@
- <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/game1.css">
-   
-    <script defer src="../js/game1.js"></script>
-    <title>Document</title>
-  </head>
-  <body>
-    <div class="container">
-    <div id="id_board" class="board">
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/game1.css">
+
+  <script defer src="../js/game1.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="piecesCnt">
+      <div id="piecesPlayer">
+        <h2>:Eat player</h2>
+      </div>
+      <div id="piecesComputer">
+        <h2>:Eat computer</h2>
+      </div>
     </div>
-    <div class="score-board">
-        <h2 id="player_score">player score: 0</h2>
-        <h2 id="computer_score">computer scor: 0</h2>
+
+    <div class="game-board">
+      <div id="id_board" class="board">
+
+      </div>
+      <div class="menu">
+        <button id="id_button_restart"><a href="../project-folder/game1.html">Restart</a></button>
+        <button id="id_button_back"><a href="/project-folder/start.html">Back to Menu</a></button>
+      </div>
     </div>
-</div>
-    
-  </body>
-  </html>
+    <div class="timer" id="timer">
+    00:00:00
+    </div>
+
+
+
+  </div>
+</body>
+
+</html>
