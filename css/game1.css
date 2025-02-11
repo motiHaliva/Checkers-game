@@ -1,40 +1,45 @@
- 
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
 }
 
 body {
-    margin: 0;
     text-align: center;
-    background:rgba(209, 165, 71, 0.719);
+    background: rgba(139, 100, 78, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+
+    align-items: center;
+    max-width: 1200px;
+    width: 90%;
+}
+
+/* לוח המשחק */
+.game-board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .board {
     display: grid;
     grid-template-columns: repeat(8, 60px);
-    width: fit-content;
-    margin: 20px auto;
-    border: solid 20px rgb(110, 58, 25);
+    margin-top: 10px;
+    border: solid 10px rgb(110, 58, 25);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-}
-
-.container {
-    display: flex;
-    flex-direction: row;
-    align-items: start;
-}
-
-.score-board {
-    display: flex;
-    justify-content: start;
-    flex-direction: column;
-    margin: 20px;
-    margin-bottom: 20px;
-}
-
-.score-board h2 {
-    color: #a72a2a;
-    font-size: 24px;
 }
 
 .cell {
@@ -46,16 +51,22 @@ body {
 }
 
 .blackCell {
+
     background-color: rgba(143, 88, 62, 0.76);
     box-shadow: inset -3px -3px 5px rgba(255, 255, 255, 0.2),
-                inset 3px 3px 5px rgba(0, 0, 0, 0.5);
-    background-image: url("../images/dark_wood.png");     background-size: cover;
+        inset 3px 3px 5px rgba(0, 0, 0, 0.5);
+
+    background-image: url("../images/dark_wood.png");
+    background-size: cover;
+
 }
 
 .whiteCell {
-    box-shadow: inset -3px -3px 5px rgba(255, 255, 255, 0.6),
-                inset 3px 3px 5px rgba(0, 0, 0, 0.2);
-    background-image: url("../images/white_wood.png"); 
+
+    box-shadow: inset -3px -3px 5px rgba(255, 255, 255, 0.6), inset 3px 3px 5px rgba(0, 0, 0, 0.2);
+
+
+    background-image: url("../images/white_wood.png");
     background-size: cover;
 }
 
@@ -63,29 +74,123 @@ body {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    z-index: 1999;
-    transition: transform 0.2s ease-in-out; /* אפקט בעת הזזת העכבר */
+    transition: transform 0.2s ease-in-out;
 }
 
 .blackCircle {
-    background-image:
-    url("../images/dark_piece.png");     background-size: cover;
-    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
-    border: 3px solid #3E2723; /* גבול כהה עם אפקט סגנוני */
+    background-image: url("../images/dark_piece.png");
+    background-size: cover;
+    border: 3px solid #3E2723;
 }
 
 .whiteCircle {
-    background-image: url("../images/white_piece.png");     background-size: cover;
+    background-image: url("../images/white_piece.png");
+    background-size: cover;
+    border: 3px solid #D7B291;
+}
 
-    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
-    border: 3px solid #D7B291; /* גבול כהה עם אפקט סגנוני */
+h2 {
+    font-size: 16px;
+    color: white;
+}
+
+.circles {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    transition: transform 0.2s ease-in-out;
+}
+
+.blackCircles {
+    background-image: url("../images/dark_piece.png");
+    background-size: cover;
+    border: 3px solid #3E2723;
+}
+
+.whiteCircles {
+    background-image: url("../images/white_piece.png");
+    background-size: cover;
+    border: 3px solid #D7B291;
 }
 
 .circle:hover {
-    transform: scale(1.05); /* שינוי קטן בגודל כדי להדגיש את הכדור */
+    transform: scale(1.1);
 }
 
-/* הוספת שולי צללים ליחסי תאים */
-.cell:hover {
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+/* לוח הניקוד */
+.score-board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.score-board h2 {
+    color: #a72a2a;
+    font-size: 22px;
+    margin: 5px 0;
+}
+
+/* חלק תפריט */
+.menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    margin-left: 50px;
+    margin-top: 15px;
+}
+
+button {
+    padding: 15px;
+    background-color: rgb(148, 112, 92);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: rgb(110, 85, 70);
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+.piecesCnt {
+    display: flex;
+    position: absolute;
+    top: 20px;
+    left: 15%;
+    transform: translateX(-50%);
+    width: 20%;
+    padding: 10px;
+    gap: 7px;
+}
+
+ #piecesPlayer {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: white;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#piecesComputer {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    margin-right: 20px;
+    color: white;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }

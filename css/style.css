@@ -5,7 +5,7 @@ body {
     margin: 0;
     font-family:serif;
     text-align: center;
-    background: url("../images/ground.jpg") repeat center center fixed;
+    background: url("../images/2.jpg") repeat center center fixed;
     background-size: cover;
 }
 .container {
@@ -14,11 +14,7 @@ body {
     left: 33%;
 }
 
-/* .logo {
-    width: 160px;
-    margin-top: 20px;
 
-} */
 main p{
     font-size:0rex;
     font-weight: bolder;
@@ -28,7 +24,7 @@ main p{
 .button {
     display: inline-block;
     padding: 10px ;
-    background-color:rgba(138, 108, 40, 0.726);
+    background-color:rgb(148, 112, 92);
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -40,6 +36,7 @@ p{
     font-size: 20px;
     margin: 0;
     display: inline-block;
+
 
 }
 .links a{
@@ -58,7 +55,7 @@ main{
 }
 footer{
     width: 100%;
-    background-color:rgba(138, 108, 40, 0.726);
+    background-color:rgb(148, 112, 92);
     opacity: calc();
     height: 35px;
     position: absolute;
@@ -69,18 +66,5 @@ footer{
     padding: 8px;
   
  
-}
-.button:hover {
-    background-color: rgba(45, 72, 100, 0.616);
-}
-@media screen and (max-width: 600px) {
-    .board {
-        grid-template-columns: repeat(3, 80px);
-    }
-
-    .card {
-        width: 80px;
-        height: 80px;
-    }
 }
 
