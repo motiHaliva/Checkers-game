@@ -4,12 +4,13 @@ const currentPlayer = JSON.parse(localStorage.getItem("currentPlayer"));
 const computerPlayer = JSON.parse(localStorage.getItem("computerPlayer"));
 const playerScoreElement = document.querySelector("#player_score");
 const computerScoreElement = document.querySelector("#computer_score");
- const piecesPlayer = document.querySelector("#piecesPlayer");
- const piecesComputer = document.querySelector("#piecesComputer");
- let playerEat = 0;
- let computerPlayerEat = 0;
+const piecesPlayer = document.querySelector("#piecesPlayer");
+const piecesComputer = document.querySelector("#piecesComputer");
+let playerEat = 0;
+let computerPlayerEat = 0;
 let computerPlayerScore = 0;
 let board = document.querySelector("#id_board");
+let gameTime = 0;
 let matrix = [
     [-1, 1, -1, 1, -1, 1, -1, 1],
     [1, -1, 1, -1, 1, -1, 1, -1],
@@ -20,16 +21,18 @@ let matrix = [
     [-1, 2, -1, 2, -1, 2, -1, 2],
     [2, -1, 2, -1, 2, -1, 2, -1],
 ];
-const timer =()=>{
-const display = document.getElementById("timer");
-let seconds = 0;
-const timer = setInterval(() => {
-    let hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
-    let mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-    let secs = String(seconds % 60).padStart(2, '0');
-    display.textContent = `${hrs}:${mins}:${secs}`;
-    seconds++;
-}, 1000);
+const timer = () => {
+    const display = document.getElementById("timer");
+    let seconds = 0;
+    const timer = setInterval(() => {
+        gameTime = seconds;
+        let hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
+        let mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+        let secs = String(seconds % 60).padStart(2, '0');
+        display.textContent = `${hrs}:${mins}:${secs}`;
+        seconds++;
+        currentPlayer.playTime = seconds;
+    }, 1000);
 }
 const createBoard = () => {
     for (let i = 0; i < matrix.length; i++) {
@@ -73,13 +76,13 @@ const createBoard = () => {
 
 let draggedCircle;
 const dragStart = (e) => {
-         if (!isPlayerTurn || e.target.classList.contains('blackCircle')) {
-            e.preventDefault();
-             return false;
-         }
-         draggedCircle = e.target;
-    
-     }
+    if (!isPlayerTurn || e.target.classList.contains('blackCircle')) {
+        e.preventDefault();
+        return false;
+    }
+    draggedCircle = e.target;
+
+}
 
 
 const dragOver = (e) => {
@@ -97,28 +100,27 @@ const drop = (e) => {
     if (isValidMove(target)) {
         target.appendChild(draggedCircle);
 
-        //עדכון המיקום של העיגול שורה וטור
         draggedCircle.dataset.row = target.dataset.row;
         draggedCircle.dataset.col = target.dataset.col;
         isPlayerTurn = false;
-     
-          if (!checkWinner()) {  // בודק אם יש מנצח
-        isPlayerTurn = false;
-        setTimeout(makeComputerMove, 1000);
-         }
 
-
+        if (!checkWinner()) {
+            setTimeout(makeComputerMove, 1000);
+        }
     }
+
+
 }
+
 
 const updateCurrentPiecses = () => {
     const whitePieces = document.querySelectorAll('.whiteCircle').length;
     const blackPieces = document.querySelectorAll('.blackCircle').length;
-    playerEat = 12 - blackPieces; 
+    playerEat = 12 - blackPieces;
     computerPlayerEat = 12 - whitePieces;
     const firstName = currentPlayer.name.split(" ")[0];
     piecesPlayer.textContent = `Eat ${firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase()}`;
-    piecesComputer.textContent =`Eat Computer`;
+    piecesComputer.textContent = `Eat Computer`;
     updateCircleUi();
 }
 const updateCircleUi = () => {
@@ -194,40 +196,40 @@ const canEat = (target) => {
 
 
 
- const isValidMove = (target) => {
-        clearHighlights();
-        if (!target.classList.contains("cell")) return false;
-    
-        let cellRow = parseInt(target.dataset.row);
-        let cellCol = parseInt(target.dataset.col);
-        let circleRow = parseInt(draggedCircle.dataset.row);
-        let circleCol = parseInt(draggedCircle.dataset.col);
-    
-        if (canEat(target)) {
-            removePiece(target)
-            checkForKing(draggedCircle, cellRow);
-            return true;
-        }
-    
-        if (draggedCircle.classList.contains('king')) {
-            if (Math.abs(circleRow - cellRow) !== 1) return false;
-            if (Math.abs(circleCol - cellCol) !== 1) return false;
-            return true;
-        }
-    
-        if (circleRow - cellRow !== 1 && draggedCircle.classList.contains("whiteCircle")) return false;
-    
-        if (circleRow - cellRow !== -1 && draggedCircle.classList.contains("blackCircle")) return false;
-    
-        if (Math.abs(circleCol - cellCol) !== 1) return false;
-    
+const isValidMove = (target) => {
+    clearHighlights();
+    if (!target.classList.contains("cell")) return false;
+
+    let cellRow = parseInt(target.dataset.row);
+    let cellCol = parseInt(target.dataset.col);
+    let circleRow = parseInt(draggedCircle.dataset.row);
+    let circleCol = parseInt(draggedCircle.dataset.col);
+
+    if (canEat(target)) {
+        removePiece(target)
         checkForKing(draggedCircle, cellRow);
-    
-    
-    
-    
         return true;
     }
+
+    if (draggedCircle.classList.contains('king')) {
+        if (Math.abs(circleRow - cellRow) !== 1) return false;
+        if (Math.abs(circleCol - cellCol) !== 1) return false;
+        return true;
+    }
+
+    if (circleRow - cellRow !== 1 && draggedCircle.classList.contains("whiteCircle")) return false;
+
+    if (circleRow - cellRow !== -1 && draggedCircle.classList.contains("blackCircle")) return false;
+
+    if (Math.abs(circleCol - cellCol) !== 1) return false;
+
+    checkForKing(draggedCircle, cellRow);
+
+
+
+
+    return true;
+}
 
 // פונקציה להסרת הכלי שנאכל
 const removePiece = (target) => {
@@ -246,9 +248,11 @@ const removePiece = (target) => {
     if (middleCell && middleCell.firstChild) {
         middleCell.removeChild(middleCell.firstChild);
         matrix[middleRow][middleCol] = 0;
-        updateCurrentPiecses ();
-        isPlayerTurn = true;
-        
+        updateCurrentPiecses();
+        if (!checkWinner()) { // בדיקת מנצח אחרי אכילה
+            isPlayerTurn = true;
+        }
+
 
     }
 }
@@ -410,10 +414,12 @@ const makeComputerMove = () => {
                 middleCell.removeChild(middleCell.firstChild);
                 matrix[middleRow][middleCol] = 0;
                 updateCurrentPiecses(); // מוסיפים קריאה כאן
-                isPlayerTurn = true;
+                if (!checkWinner()) { // בדיקת מנצח אחרי אכילה
+                    isPlayerTurn = true;
+                }
             }
 
-
+            checkWinner();
             checkForKing(piece, move.row);
             validMove = true;
             break;
@@ -461,9 +467,9 @@ const makeComputerMove = () => {
     if (validMove) {
 
         setTimeout(() => {
-            if (!checkWinner()) {
-                isPlayerTurn = true;
-            }
+            checkWinner();
+            isPlayerTurn = true;
+
         }, 1000);  // השהייה של חצי שנייה
     }
 }
@@ -471,33 +477,48 @@ const checkWinner = () => {
     const blackPieces = document.querySelectorAll('.blackCircle');
     const whitePieces = document.querySelectorAll('.whiteCircle');
     let currentPlayerData = JSON.parse(localStorage.getItem("currentPlayer"));
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let userIndex = users.findIndex(user => user.name === currentPlayerData.name);
 
-
-    
-
-    if (blackPieces.length === 0) {
+    if (blackPieces.length === 0) { // שים לב: בדיקת החיילים הלבנים קודם
         currentPlayerData.wins = (currentPlayerData.wins || 0) + 1;
         currentPlayerData.playTime = (currentPlayerData.playTime || 0) + gameTime;
         localStorage.setItem("currentPlayer", JSON.stringify(currentPlayerData));
-        
-        alert(`${currentPlayerData.name} Won!`);
+
+        if (userIndex !== -1) {
+            users[userIndex].wins = currentPlayerData.wins;
+            users[userIndex].playTime = currentPlayerData.playTime;
+            localStorage.setItem("users", JSON.stringify(users));
+        }
+
+        alert(`${currentPlayerData.name} wow!`);
         setTimeout(() => {
             window.location.href = "../project-folder/start.html";
         }, 2000);
         return true;
     }
 
-    if (whitePieces.length === 0) {
-        currentPlayerData.losses = (currentPlayerData.losses || 0) + 1;
+    if (whitePieces.length === 0) { // שים לב: בדיקת החיילים הלבנים קודם
+        currentPlayerData.wins = (currentPlayerData.wins || 0) + 1;
         currentPlayerData.playTime = (currentPlayerData.playTime || 0) + gameTime;
         localStorage.setItem("currentPlayer", JSON.stringify(currentPlayerData));
-        
-        alert("Computer Won!");
+
+
+        if (userIndex !== -1) {
+            users[userIndex].losses = currentPlayerData.losses;
+            users[userIndex].playTime = currentPlayerData.playTime;
+            localStorage.setItem("users", JSON.stringify(users));
+        }
+
+
+        alert(`Computer Won! Won!`);
         setTimeout(() => {
             window.location.href = "../project-folder/start.html";
         }, 2000);
         return true;
     }
+
+
 
     return false;
 }

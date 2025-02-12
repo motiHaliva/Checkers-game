@@ -14,11 +14,11 @@
 
 .container {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+    align-items: start;
     max-width: 1200px;
     width: 100%;
-    position: relative;
+    /* position: relative; */
  
 } 
 
@@ -35,7 +35,7 @@
 
 .board {
     display: grid;
-    grid-template-columns: repeat(8, minmax(30px, 60px));
+    grid-template-columns: repeat(8, minmax(29px, 55px));
     margin-top: 10px;
     border: solid clamp(5px, 2vw, 10px) rgb(110, 58, 25);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
@@ -115,7 +115,7 @@
 }
 
 button {
-    padding: clamp(8px, 2vw, 15px);
+    padding:7px;
     background-color: rgba(106, 55, 24, 0.795);
     color: white;
     border: none;
@@ -131,19 +131,31 @@ button:hover {
 }
 
 
-.piecesCnt {
-    position: fixed;
-    top: 20px;
-    left: 12px;
+.piecesCnt{
     display: flex;
-    gap: 10px;
+
+    justify-content: space-around;
     max-width: 300px;
     width: 60%;
 }
 
+.piecesCnt2{
+    display: flex;
+    justify-content: space-around;
+    max-width: 300px;
+    width: 60%
+}
+#piecesPlayer h2, 
+#piecesComputer h2 {
+    display:inline-block; 
+}
+
 #piecesPlayer, #piecesComputer {
-    flex: 1;
-    padding: clamp(8px, 2vw, 10px);
+    margin-top: 40px;
+    max-height: 220px;
+    display: flex;
+    flex-wrap: wrap;
+    padding:15px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     color: white;
@@ -151,14 +163,11 @@ button:hover {
     display: flex;
     align-items: center;
     flex-direction: column;
-    gap: 5px;
 }
 
 
+
 .timer {
-    position: fixed;
-    top: 20px;
-    right: 20px;
     padding: clamp(8px, 2vw, 10px);
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
