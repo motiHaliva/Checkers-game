@@ -4,8 +4,8 @@ const currentPlayer = JSON.parse(localStorage.getItem("currentPlayer"));
 const computerPlayer = JSON.parse(localStorage.getItem("computerPlayer"));
 const playerScoreElement = document.querySelector("#player_score");
 const computerScoreElement = document.querySelector("#computer_score");
-const piecesPlayer = document.querySelector("#piecesPlayer");
-const piecesComputer = document.querySelector("#piecesComputer");
+const piecesPlayer = document.querySelector("#piecesPlayer"); 
+const piecesComputer = document.querySelector("#piecesComputer"); 
 let playerEat = 0;
 let computerPlayerEat = 0;
 let computerPlayerScore = 0;
@@ -118,17 +118,26 @@ const updateCurrentPiecses = () => {
     const blackPieces = document.querySelectorAll('.blackCircle').length;
     playerEat = 12 - blackPieces;
     computerPlayerEat = 12 - whitePieces;
+    
+    // קודם מגדירים את firstName
     const firstName = currentPlayer.name.split(" ")[0];
-    piecesPlayer.textContent = `Eat ${firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase()}`;
-    piecesComputer.textContent = `Eat Computer`;
+    
+    // אחר כך משתמשים בו
+    const playerTitle = document.querySelector(".piecesCnt h2");
+    playerTitle.textContent = `Eat ${firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase()}`;
+    
+    const computerTitle = document.querySelector(".piecesCnt2 h2");
+    computerTitle.textContent = "Eat Computer:";
+
     updateCircleUi();
 }
 const updateCircleUi = () => {
-    const existingPlayerCircles = piecesPlayer.querySelectorAll(".blackCircle").length;
-    const existingComputerCircles = piecesComputer.querySelectorAll(".whiteCircle").length;
 
-    // הוספת עיגולים לשחקן רק אם חסרים
-    for (let i = existingPlayerCircles; i < playerEat; i++) {
+    piecesPlayer.innerHTML = '';
+    piecesComputer.innerHTML = '';
+
+
+    for (let i = 0; i < playerEat; i++) {
         let circle = document.createElement("div");
         circle.classList.add("circles", "blackCircles");
         circle.style.width = "35px";
@@ -137,8 +146,8 @@ const updateCircleUi = () => {
         piecesPlayer.appendChild(circle);
     }
 
-    // הוספת עיגולים למחשב רק אם חסרים
-    for (let i = existingComputerCircles; i < computerPlayerEat; i++) {
+
+    for (let i = 0; i < computerPlayerEat; i++) {
         let circle = document.createElement("div");
         circle.classList.add("circles", "whiteCircles");
         circle.style.width = "35px";
@@ -146,7 +155,7 @@ const updateCircleUi = () => {
         circle.style.margin = "5px";
         piecesComputer.appendChild(circle);
     }
-};
+}
 
 
 

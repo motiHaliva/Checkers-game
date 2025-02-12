@@ -133,33 +133,43 @@ button:hover {
 
 .piecesCnt{
     display: flex;
-
     justify-content: space-around;
     max-width: 300px;
-    width: 60%;
+    width: 10%;
+    padding:15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: white;
+    background: rgba(106, 55, 24, 0.795);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 .piecesCnt2{
     display: flex;
     justify-content: space-around;
     max-width: 300px;
-    width: 60%
-}
-#piecesPlayer h2, 
-#piecesComputer h2 {
-    display:inline-block; 
-}
-
-#piecesPlayer, #piecesComputer {
-    margin-top: 40px;
-    max-height: 220px;
-    display: flex;
-    flex-wrap: wrap;
+    width: 10%;
     padding:15px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     color: white;
     background: rgba(106, 55, 24, 0.795);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    
+}
+
+#piecesPlayer, #piecesComputer {
+    margin-top: 15px;
+    max-height: 350px;
+    display: flex;
+    flex-wrap: wrap;
+    padding:15px;
+    border-radius: 10px;
+    color: white;
     display: flex;
     align-items: center;
     flex-direction: column;
