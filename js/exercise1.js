@@ -23,7 +23,6 @@
             email: id_email1.value,
             password: id_password.value
         };
-        // let users = JSON.parse(localStorage.getItem("users")) || [];
         users.push(newUser);
         localStorage.setItem("users", JSON.stringify(users));
         window.location.href = "../project-folder/login.html";

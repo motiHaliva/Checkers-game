@@ -14,11 +14,11 @@
 
 .container {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+    align-items: start;
     max-width: 1200px;
     width: 100%;
-    position: relative;
+    /* position: relative; */
  
 } 
 
@@ -35,7 +35,7 @@
 
 .board {
     display: grid;
-    grid-template-columns: repeat(8, minmax(30px, 60px));
+    grid-template-columns: repeat(8, minmax(33px, 70px));
     margin-top: 10px;
     border: solid clamp(5px, 2vw, 10px) rgb(110, 58, 25);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
@@ -65,7 +65,7 @@
     background-size: cover;
 }
 
-/* Pieces */
+
 .circle, .circles {
     width: 80%;
     height: 80%;
@@ -115,7 +115,7 @@
 }
 
 button {
-    padding: clamp(8px, 2vw, 15px);
+    padding:7px;
     background-color: rgba(106, 55, 24, 0.795);
     color: white;
     border: none;
@@ -131,19 +131,12 @@ button:hover {
 }
 
 
-.piecesCnt {
-    position: fixed;
-    top: 20px;
-    left: 12px;
+.piecesCnt{
     display: flex;
-    gap: 10px;
+    justify-content: space-around;
     max-width: 300px;
-    width: 60%;
-}
-
-#piecesPlayer, #piecesComputer {
-    flex: 1;
-    padding: clamp(8px, 2vw, 10px);
+    width: 10%;
+    padding:15px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     color: white;
@@ -151,14 +144,36 @@ button:hover {
     display: flex;
     align-items: center;
     flex-direction: column;
-    gap: 5px;
+}
+
+.piecesCnt2{
+    display: flex;
+    justify-content: space-around;
+    max-width: 300px;
+    width: 10%;
+    padding:15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: white;
+    background: rgba(106, 55, 24, 0.795);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    
+}
+
+#piecesPlayer, #piecesComputer {
+    margin-top: 15px;
+    max-height: 350px;
+    flex-wrap: wrap;
+     display: flex; 
+     align-items: center;
+    flex-direction: column; 
 }
 
 
+
 .timer {
-    position: fixed;
-    top: 20px;
-    right: 20px;
     padding: clamp(8px, 2vw, 10px);
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -171,43 +186,61 @@ a{
     text-decoration: none;
 }
 
-/* Media Queries */
-@media screen and (max-width: 768px) {
+
+ @media screen and (max-width: 831px) {
     .container {
         flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+
     }
 
-    .board {
-        grid-template-columns: repeat(8, minmax(25px, 45px));
-    }
-
-    .piecesCnt {
-        position: static;
-        margin-bottom: 20px;
-    }
-
-    .timer {
-        margin-bottom: 20px;
-    }
-
-    .menu {
-        margin: 10px 0;
-    }
-}
-
-@media screen and (max-width: 480px) {
     body {
-        padding: 10px;
+        padding: 7px;
     }
 
     .board {
         grid-template-columns: repeat(8, minmax(20px, 35px));
+       
+    }
+    .pieces-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 5px;
+        width: 100%;
+        margin-bottom: 5px;
     }
 
-    .piecesCnt {
+    .piecesCnt, .piecesCnt2 {
+
+        width: 90%; 
+        padding: 5px;
+        margin: 0;
         flex-direction: column;
+        min-height: 100px;
     }
 
+    #piecesPlayer, #piecesComputer {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 3px;
+        margin-top: 5px;
+        max-height: none;
+    }
+
+    .circles {
+        width: 25px !important; 
+        height: 25px !important;
+        margin: 2px;
+    }
+
+    .timer {
+        position: static;
+        width: 90%;
+        margin: 5px auto;
+    }
     .menu {
         flex-direction: column;
         width: 100%;

@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../css/game1.css">
+  <link rel="stylesheet" href="/css/game1.css">
 
-  <script defer src="../js/game1.js"></script>
+  <script defer src="/js/game1.js"></script>
   <title>Document</title>
 </head>
 
@@ -14,26 +14,34 @@
 
   <div class="container">
     <div class="piecesCnt">
+      <h2>Eat player</h2>
       <div id="piecesPlayer">
-        <h2>:Eat player</h2>
+        
       </div>
-      <div id="piecesComputer">
-        <h2>:Eat computer</h2>
-      </div>
+
     </div>
 
     <div class="game-board">
+      <div class="timer" id="timer">
+        00:00:00
+      </div>
       <div id="id_board" class="board">
 
       </div>
       <div class="menu">
         <button id="id_button_restart"><a href="../project-folder/game1.html">Restart</a></button>
+
         <button id="id_button_back"><a href="/project-folder/start.html">Back to Menu</a></button>
       </div>
     </div>
-    <div class="timer" id="timer">
-    00:00:00
+    <div class="piecesCnt2">
+      <h2>Eat computer</h2>
+
+      <div id="piecesComputer">
+      </div>
     </div>
+
+
 
 
 

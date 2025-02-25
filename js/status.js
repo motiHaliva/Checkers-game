@@ -1,3 +1,9 @@
+const formatTime = (totalSeconds) => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes} : ${seconds}`;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const statsContainer = document.getElementById('stats-container');
     const currentPlayer = JSON.parse(localStorage.getItem('currentPlayer'));
@@ -17,6 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span>Total Losses:</span>
                 <span>${currentPlayer.losses || 0}</span>
             </div>
+               <div class="stat-card">
+                <span>Total Play Time:</span>
+                <span>${formatTime(currentPlayer.playTime || 0)}</span>
+            </div>
+        
         `;
         statsContainer.innerHTML = statsHTML;
     }
@@ -24,5 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('back-btn').addEventListener('click', () => {
         window.location.href = 'start.html';
     });
+
 });
 
