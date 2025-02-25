@@ -21,19 +21,7 @@ let matrix = [
     [-1, 2, -1, 2, -1, 2, -1, 2],
     [2, -1, 2, -1, 2, -1, 2, -1],
 ];
-const timer = () => {
-    const display = document.getElementById("timer");
-    let seconds = 0;
-    const timer = setInterval(() => {
-        gameTime = seconds;
-        let hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
-        let mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-        let secs = String(seconds % 60).padStart(2, '0');
-        display.textContent = `${hrs}:${mins}:${secs}`;
-        seconds++;
-        currentPlayer.playTime = seconds;
-    }, 1000);
-}
+
 const createBoard = () => {
     for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
@@ -65,6 +53,7 @@ const createBoard = () => {
                 // שומר על העיגול שזז
                 circle.addEventListener("dragstart", dragStart);
             }
+            cell.addEventListener("click", handleCellClick);
 
             // מאזין לתא שנגרר משהו מתוכו
             cell.addEventListener("dragover", dragOver);
@@ -81,7 +70,6 @@ const dragStart = (e) => {
         return false;
     }
     draggedCircle = e.target;
-
 }
 
 
@@ -111,6 +99,50 @@ const drop = (e) => {
 
 
 }
+const handleCellClick = (e) => {
+    const cell = e.target;
+    
+    // אם לחצנו על חייל
+    if (cell.classList.contains('circle')) {
+        if (cell.classList.contains('whiteCircle') && isPlayerTurn) {
+            showPossibleMoves(cell);
+        }
+        return;
+    }
+
+    // אם יש חייל נבחר ולחצנו על תא ריק
+    if (draggedCircle && cell.classList.contains('cell')) {
+        // בודק אם התא צבוע (כלומר, מהלך חוקי)
+        if (cell.style.backgroundImage.includes('dark_selected_wood.png')) {
+            if (isValidMove(cell)) {
+                cell.appendChild(draggedCircle);
+                draggedCircle.dataset.row = cell.dataset.row;
+                draggedCircle.dataset.col = cell.dataset.col;
+                clearHighlights();
+                isPlayerTurn = false;
+
+                if (!checkWinner()) {
+                    setTimeout(makeComputerMove, 1000);
+                }
+            }
+        }
+        draggedCircle = null; // מנקה את הבחירה אחרי כל לחיצה
+    }
+}
+
+const timer = () => {
+    const display = document.getElementById("timer");
+    let seconds = 0;
+    const timer = setInterval(() => {
+        gameTime = seconds;
+        let hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
+        let mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+        let secs = String(seconds % 60).padStart(2, '0');
+        display.textContent = `${hrs}:${mins}:${secs}`;
+        seconds++;
+        currentPlayer.playTime = (seconds/60)+mins;
+    }, 1000);
+}
 
 
 const updateCurrentPiecses = () => {
@@ -118,25 +150,16 @@ const updateCurrentPiecses = () => {
     const blackPieces = document.querySelectorAll('.blackCircle').length;
     playerEat = 12 - blackPieces;
     computerPlayerEat = 12 - whitePieces;
-    
-    // קודם מגדירים את firstName
     const firstName = currentPlayer.name.split(" ")[0];
-    
-    // אחר כך משתמשים בו
     const playerTitle = document.querySelector(".piecesCnt h2");
     playerTitle.textContent = `Eat ${firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase()}`;
-    
     const computerTitle = document.querySelector(".piecesCnt2 h2");
-    computerTitle.textContent = "Eat Computer:";
-
+    computerTitle.textContent = "Eat Computer";
     updateCircleUi();
 }
 const updateCircleUi = () => {
-
     piecesPlayer.innerHTML = '';
     piecesComputer.innerHTML = '';
-
-
     for (let i = 0; i < playerEat; i++) {
         let circle = document.createElement("div");
         circle.classList.add("circles", "blackCircles");
@@ -145,8 +168,6 @@ const updateCircleUi = () => {
         circle.style.margin = "5px";
         piecesPlayer.appendChild(circle);
     }
-
-
     for (let i = 0; i < computerPlayerEat; i++) {
         let circle = document.createElement("div");
         circle.classList.add("circles", "whiteCircles");
@@ -258,9 +279,9 @@ const removePiece = (target) => {
         middleCell.removeChild(middleCell.firstChild);
         matrix[middleRow][middleCol] = 0;
         updateCurrentPiecses();
-        if (!checkWinner()) { // בדיקת מנצח אחרי אכילה
+        // if (!checkWinner()) { // בדיקת מנצח אחרי אכילה
             isPlayerTurn = true;
-        }
+        // }
 
 
     }
@@ -428,7 +449,7 @@ const makeComputerMove = () => {
                 }
             }
 
-            checkWinner();
+            // checkWinner();
             checkForKing(piece, move.row);
             validMove = true;
             break;
@@ -476,10 +497,8 @@ const makeComputerMove = () => {
     if (validMove) {
 
         setTimeout(() => {
-            checkWinner();
             isPlayerTurn = true;
-
-        }, 1000);  // השהייה של חצי שנייה
+        }, 1000); 
     }
 }
 const checkWinner = () => {
@@ -499,7 +518,6 @@ const checkWinner = () => {
             users[userIndex].playTime = currentPlayerData.playTime;
             localStorage.setItem("users", JSON.stringify(users));
         }
-
         alert(`${currentPlayerData.name} wow!`);
         setTimeout(() => {
             window.location.href = "../project-folder/start.html";
@@ -508,18 +526,15 @@ const checkWinner = () => {
     }
 
     if (whitePieces.length === 0) { // שים לב: בדיקת החיילים הלבנים קודם
-        currentPlayerData.wins = (currentPlayerData.wins || 0) + 1;
+        currentPlayerData.losses = (currentPlayerData.losses || 0) + 1;
         currentPlayerData.playTime = (currentPlayerData.playTime || 0) + gameTime;
         localStorage.setItem("currentPlayer", JSON.stringify(currentPlayerData));
-
-
+        
         if (userIndex !== -1) {
             users[userIndex].losses = currentPlayerData.losses;
             users[userIndex].playTime = currentPlayerData.playTime;
             localStorage.setItem("users", JSON.stringify(users));
         }
-
-
         alert(`Computer Won! Won!`);
         setTimeout(() => {
             window.location.href = "../project-folder/start.html";

@@ -35,7 +35,7 @@
 
 .board {
     display: grid;
-    grid-template-columns: repeat(8, minmax(29px, 55px));
+    grid-template-columns: repeat(8, minmax(33px, 70px));
     margin-top: 10px;
     border: solid clamp(5px, 2vw, 10px) rgb(110, 58, 25);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
@@ -65,7 +65,7 @@
     background-size: cover;
 }
 
-/* Pieces */
+
 .circle, .circles {
     width: 80%;
     height: 80%;
@@ -165,14 +165,10 @@ button:hover {
 #piecesPlayer, #piecesComputer {
     margin-top: 15px;
     max-height: 350px;
-    display: flex;
     flex-wrap: wrap;
-    padding:15px;
-    border-radius: 10px;
-    color: white;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+     display: flex; 
+     align-items: center;
+    flex-direction: column; 
 }
 
 
@@ -190,43 +186,61 @@ a{
     text-decoration: none;
 }
 
-/* Media Queries */
-@media screen and (max-width: 768px) {
+
+ @media screen and (max-width: 831px) {
     .container {
         flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+
     }
 
-    .board {
-        grid-template-columns: repeat(8, minmax(25px, 45px));
-    }
-
-    .piecesCnt {
-        position: static;
-        margin-bottom: 20px;
-    }
-
-    .timer {
-        margin-bottom: 20px;
-    }
-
-    .menu {
-        margin: 10px 0;
-    }
-}
-
-@media screen and (max-width: 480px) {
     body {
-        padding: 10px;
+        padding: 7px;
     }
 
     .board {
         grid-template-columns: repeat(8, minmax(20px, 35px));
+       
+    }
+    .pieces-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 5px;
+        width: 100%;
+        margin-bottom: 5px;
     }
 
-    .piecesCnt {
+    .piecesCnt, .piecesCnt2 {
+
+        width: 90%; 
+        padding: 5px;
+        margin: 0;
         flex-direction: column;
+        min-height: 100px;
     }
 
+    #piecesPlayer, #piecesComputer {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 3px;
+        margin-top: 5px;
+        max-height: none;
+    }
+
+    .circles {
+        width: 25px !important; 
+        height: 25px !important;
+        margin: 2px;
+    }
+
+    .timer {
+        position: static;
+        width: 90%;
+        margin: 5px auto;
+    }
     .menu {
         flex-direction: column;
         width: 100%;
