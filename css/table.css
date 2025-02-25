@@ -39,6 +39,7 @@ header h1 {
     width: 100%;
     border-collapse: collapse;
     color: white;
+    font-weight: bolder;
 }
 
 .leaderboard-table th,
@@ -57,9 +58,12 @@ header h1 {
     background: rgba(255, 255, 255, 0.1);
 }
 
-.rank-1 { color: gold; }
-.rank-2 { color: silver; }
-.rank-3 { color: #cd7f32; }
+.rank-1 { color: gold;
+font-weight: bolder; }
+.rank-2 { color: silver;
+    font-weight: bolder; }
+.rank-3 { color: #cd7f32;
+    font-weight: bolder; }
 
 .button {
     display: inline-block;

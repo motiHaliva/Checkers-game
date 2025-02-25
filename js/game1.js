@@ -279,11 +279,7 @@ const removePiece = (target) => {
         middleCell.removeChild(middleCell.firstChild);
         matrix[middleRow][middleCol] = 0;
         updateCurrentPiecses();
-        // if (!checkWinner()) { // בדיקת מנצח אחרי אכילה
             isPlayerTurn = true;
-        // }
-
-
     }
 }
 
@@ -508,7 +504,7 @@ const checkWinner = () => {
     let users = JSON.parse(localStorage.getItem("users")) || [];
     let userIndex = users.findIndex(user => user.name === currentPlayerData.name);
 
-    if (blackPieces.length === 0) { // שים לב: בדיקת החיילים הלבנים קודם
+    if (blackPieces.length === 0) { 
         currentPlayerData.wins = (currentPlayerData.wins || 0) + 1;
         currentPlayerData.playTime = (currentPlayerData.playTime || 0) + gameTime;
         localStorage.setItem("currentPlayer", JSON.stringify(currentPlayerData));
@@ -541,9 +537,6 @@ const checkWinner = () => {
         }, 2000);
         return true;
     }
-
-
-
     return false;
 }
 
